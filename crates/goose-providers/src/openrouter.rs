@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 use crate::images::ImageFormat;
 use anyhow::Result;
 use async_trait::async_trait;
@@ -78,17 +79,54 @@ impl OpenRouterProvider {
         model_config: &ModelConfig,
         payload: &Value,
     ) -> Result<reqwest::Response, ProviderError> {
-        self.with_retry(|| async {
-            let resp = self
-                .api_client
-                .request("api/v1/chat/completions")
-                .model_headers(model_config)?
-                .streaming(true)
-                .response_post(payload)
-                .await?;
-            handle_status(resp).await
-        })
-        .await
+        let resp = self
+            .with_retry(|| async {
+                let resp = self
+                    .api_client
+                    .request("api/v1/chat/completions")
+                    .model_headers(model_config)?
+                    .streaming(true)
+                    .response_post(payload)
+                    .await?;
+                if resp.status() == reqwest::StatusCode::FORBIDDEN {
+                    // Classified below; a blocked request fails the same way on every retry.
+                    return Ok(resp);
+                }
+                handle_status(resp).await
+            })
+            .await?;
+        if resp.status() == reqwest::StatusCode::FORBIDDEN {
+            return Err(forbidden_error(&resp.text().await.unwrap_or_default()));
+        }
+        Ok(resp)
+    }
+}
+
+pub const OPENROUTER_BLOCKED_PREFIX: &str = "OpenRouter blocked this request: ";
+
+// OpenRouter answers invalid keys with 401 and uses 403 for guardrail, model-allowlist and
+// content-policy blocks, so the generic 403 => Authentication mapping would wrongly tell users
+// to sign in again.
+fn forbidden_error(body: &str) -> ProviderError {
+    let error = serde_json::from_str::<Value>(body)
+        .ok()
+        .and_then(|payload| payload.get("error").cloned());
+    let message = error
+        .as_ref()
+        .and_then(|e| e.get("message"))
+        .and_then(Value::as_str)
+        .unwrap_or(body)
+        .to_string();
+    let error_type = error
+        .as_ref()
+        .and_then(|e| e.pointer("/metadata/error_type"))
+        .and_then(Value::as_str);
+    match error_type {
+        Some(kind @ ("content_policy_violation" | "refusal")) => ProviderError::Refusal {
+            details: message,
+            category: Some(kind.to_string()),
+        },
+        _ => ProviderError::RequestFailed(format!("{OPENROUTER_BLOCKED_PREFIX}{message}")),
     }
 }
 
@@ -598,6 +636,39 @@ impl Provider for OpenRouterProvider {
 mod tests {
     use super::*;
     use crate::base::ProviderDescriptor;
+
+    #[test]
+    fn forbidden_guardrail_block_is_not_an_authentication_error() {
+        let err = forbidden_error(
+            r#"{"error":{"code":403,"message":"Model not allowed by your guardrail"}}"#,
+        );
+        assert!(matches!(
+            err,
+            ProviderError::RequestFailed(ref m)
+                if m == "OpenRouter blocked this request: Model not allowed by your guardrail"
+        ));
+    }
+
+    #[test]
+    fn forbidden_content_policy_is_a_refusal() {
+        let err = forbidden_error(
+            r#"{"error":{"code":403,"message":"Input flagged","metadata":{"error_type":"content_policy_violation"}}}"#,
+        );
+        assert!(matches!(
+            err,
+            ProviderError::Refusal { ref details, category: Some(ref c) }
+                if details == "Input flagged" && c == "content_policy_violation"
+        ));
+    }
+
+    #[test]
+    fn forbidden_non_json_body_keeps_raw_text() {
+        let err = forbidden_error("Forbidden");
+        assert!(matches!(
+            err,
+            ProviderError::RequestFailed(ref m) if m == "OpenRouter blocked this request: Forbidden"
+        ));
+    }
 
     fn model_config(model_name: &str) -> ModelConfig {
         ModelConfig {

@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import type { IpcMainInvokeEvent, OpenDialogOptions, OpenDialogReturnValue } from 'electron';
 import {
   app,
@@ -23,6 +24,8 @@ import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
 import started from 'electron-squirrel-startup';
 import path from 'node:path';
+import { APP_NAME } from './distro/brand';
+import { applyDistroBundledEnv, distroBackendEnv, registerDistroIpc } from './distro/mainProcess';
 import os from 'node:os';
 import { execFileSync, spawn, execFile } from 'child_process';
 import 'dotenv/config';
@@ -388,6 +391,13 @@ app.on('certificate-error', (event, _webContents, url, _error, certificate, call
 
 app.whenReady().then(() => {
   appConfig.GOOSE_LOCALE = getConfiguredGooseLocale();
+});
+
+// Unpackaged runs use Electron's own bundle, so the Dock would otherwise show the Electron icon.
+app.whenReady().then(() => {
+  if (process.platform === 'darwin' && !app.isPackaged) {
+    app.dock?.setIcon(path.join(process.cwd(), 'src', 'images', 'icon.png'));
+  }
 });
 
 // Main-process net.fetch and renderer WebSockets: pin to the exact cert once known.
@@ -762,8 +772,9 @@ app.on('open-url', async (_event, url) => {
 app.on('will-finish-launching', () => {
   if (process.platform === 'darwin') {
     app.setAboutPanelOptions({
-      applicationName: 'Goose',
+      applicationName: APP_NAME,
       applicationVersion: app.getVersion(),
+      credits: 'Powered by goose (open source, Apache 2.0)',
     });
   }
 });
@@ -817,7 +828,7 @@ async function handleFileOpen(filePath: string) {
 
     // Show user-friendly error notification
     new Notification({
-      title: 'Goose',
+      title: APP_NAME,
       body: `Could not open directory: ${path.basename(filePath)}`,
     }).show();
   }
@@ -869,6 +880,7 @@ interface BundledConfig {
 const getBundledConfig = (): BundledConfig => {
   //{env-macro-start}//
   //needed when goose is bundled for a specific provider
+  applyDistroBundledEnv();
   //{env-macro-end}//
   return {
     defaultProvider: process.env.GOOSE_DEFAULT_PROVIDER,
@@ -1203,6 +1215,7 @@ const createChat = async (
         tls: true,
         env: {
           GOOSE_PATH_ROOT: appConfig.GOOSE_PATH_ROOT as string | undefined,
+          ...distroBackendEnv(),
         },
         loginShellPath,
         isPackaged: app.isPackaged,
@@ -1232,7 +1245,7 @@ const createChat = async (
       log.error('goose serve failed to start', error);
       dialog.showMessageBoxSync({
         type: 'error',
-        title: 'Goose Failed to Start',
+        title: `${APP_NAME} Failed to Start`,
         message: 'The backend server failed to start.',
         detail: [
           'Backend: goose serve',
@@ -1927,6 +1940,8 @@ ipcMain.on('react-ready', (event) => {
   }
 });
 
+registerDistroIpc();
+
 ipcMain.handle('open-external', async (event, url: string) => {
   const senderWindow = BrowserWindow.fromWebContents(event.sender) ?? undefined;
   return openExternalUrl(url, senderWindow, getConfiguredGooseLocale());
@@ -2559,7 +2574,7 @@ async function appMain() {
 
   const shortcuts = getKeyboardShortcuts(settings);
 
-  const appMenu = menu?.items.find((item) => item.label === 'Goose');
+  const appMenu = menu?.items.find((item) => item.label === app.name);
   if (appMenu?.submenu) {
     appMenu.submenu.insert(1, new MenuItem({ type: 'separator' }));
     if (shortcuts.settings) {
@@ -2687,7 +2702,7 @@ async function appMain() {
     if (shortcuts.focusWindow) {
       fileMenu.submenu.append(
         new MenuItem({
-          label: menuT('Focus Goose Window'),
+          label: menuT(`Focus ${APP_NAME} Window`),
           accelerator: shortcuts.focusWindow,
           click() {
             focusWindow();
@@ -2796,7 +2811,7 @@ async function appMain() {
 
       // Create the About Goose menu item with a submenu
       const aboutGooseMenuItem = new MenuItem({
-        label: menuT('About Goose'),
+        label: menuT(`About ${APP_NAME}`),
         submenu: Menu.buildFromTemplate([]), // Start with an empty submenu for About
       });
 
@@ -3137,7 +3152,7 @@ app.whenReady().then(async () => {
   try {
     await appMain();
   } catch (error) {
-    dialog.showErrorBox('Goose Error', `Failed to create main window: ${error}`);
+    dialog.showErrorBox(`${APP_NAME} Error`, `Failed to create main window: ${error}`);
     app.quit();
   }
 });

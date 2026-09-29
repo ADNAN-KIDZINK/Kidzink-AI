@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getLocale } from './index';
 
@@ -132,10 +133,11 @@ describe('getLocale', () => {
 });
 
 describe('loadMessages', () => {
-  it('returns empty object for English locale', async () => {
+  it('returns the Kidzink-branded English overrides', async () => {
     const { loadMessages } = await import('./index');
     const messages = await loadMessages('en');
-    expect(messages).toEqual({});
+    expect(messages['onboardingGuard.welcomeTitle']).toBe('Welcome to Kidzink AI');
+    expect(messages['acpReadinessPanel.checkAgain']).toBeUndefined();
   });
 
   it('returns empty object for unsupported locale (with warning)', async () => {

@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 /**
  * Theme tokens — the single source of truth for all MCP semantic token values.
  *
@@ -18,6 +19,7 @@ import type {
   McpUiStyleVariableKey,
   McpUiStyles,
 } from '@modelcontextprotocol/ext-apps/app-bridge';
+import { applyBrandTokens } from '../distro/theme';
 
 type ThemeTokens = Record<McpUiStyleVariableKey, string>;
 
@@ -373,9 +375,10 @@ export function getResolvedTheme(): ThemeId {
  */
 export function applyThemeTokens(theme?: ThemeId): void {
   const resolved = theme ?? getResolvedTheme();
-  const { tokens } = themes[resolved] ?? themes.light;
+  const { tokens, variant } = themes[resolved] ?? themes.light;
   const root = document.documentElement;
   for (const [key, value] of Object.entries(tokens)) {
     root.style.setProperty(key, value);
   }
+  applyBrandTokens(variant);
 }

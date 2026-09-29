@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -8,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-background-inverse text-text-inverse hover:bg-background-inverse/90 shadow-xs',
+        default: 'bg-brand text-on-brand hover:bg-brand-hover shadow-xs',
         destructive:
           'bg-background-danger text-white hover:bg-background-danger/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-background-danger/60 shadow-xs',
         outline: 'border hover:bg-background-secondary',

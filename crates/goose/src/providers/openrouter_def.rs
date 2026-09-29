@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 use anyhow::{bail, Result};
 use futures::future::BoxFuture;
 use goose_providers::{
@@ -52,11 +53,18 @@ async fn from_env(tls_config: Option<TlsConfig>) -> Result<OpenRouterProvider> {
         .get_param("OPENROUTER_HOST")
         .unwrap_or_else(|_| "https://openrouter.ai".to_string());
     let configured_parameters = configured_openrouter_parameters(config)?;
+    // OpenRouter attributes usage to the calling app by these headers.
+    let app_url: String = config
+        .get_param("OPENROUTER_APP_URL")
+        .unwrap_or_else(|_| "https://goose-docs.ai".to_string());
+    let app_title: String = config
+        .get_param("OPENROUTER_APP_TITLE")
+        .unwrap_or_else(|_| "goose".to_string());
 
     let api_client = ApiClient::new_with_tls(host, AuthMethod::BearerToken(api_key), tls_config)?
         .with_request_builder(crate::session_context::session_id_request_builder())
-        .with_header("HTTP-Referer", "https://goose-docs.ai")?
-        .with_header("X-Title", "goose")?
+        .with_header("HTTP-Referer", &app_url)?
+        .with_header("X-Title", &app_title)?
         .with_header("X-OpenRouter-Categories", "cli-agent,productivity")?;
 
     Ok(OpenRouterProvider::new(

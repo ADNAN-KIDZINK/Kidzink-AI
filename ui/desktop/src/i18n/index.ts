@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 /**
  * Locale detection and message loading for the i18n system.
  *
@@ -13,6 +14,7 @@
 
 // Re-export react-intl utilities that components use directly
 export { defineMessages, useIntl } from 'react-intl';
+import { brandedEnglishMessages, englishOnly } from '../distro/i18n';
 
 /** The set of locales that have translation catalogs. */
 // prettier-ignore
@@ -91,7 +93,7 @@ export function getLocale(): { locale: string; messageLocale: string } {
 }
 
 /** Resolved locales — computed once at module load. */
-const resolvedLocale = getLocale();
+const resolvedLocale = englishOnly(getLocale());
 /** Full BCP 47 tag for date/number formatting (e.g. "en-GB"). */
 export const currentLocale = resolvedLocale.locale;
 /** Base language for loading message catalogs (e.g. "en"). */
@@ -103,8 +105,7 @@ export const currentMessageLocale = resolvedLocale.messageLocale;
  */
 export async function loadMessages(locale: string): Promise<Record<string, string>> {
   if (locale === 'en') {
-    // English strings live in source code as defaultMessage — no catalog needed.
-    return {};
+    return brandedEnglishMessages();
   }
 
   try {

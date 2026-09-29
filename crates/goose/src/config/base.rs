@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 use crate::config::paths::Paths;
 use crate::config::GooseMode;
 use crate::providers::private_file::{private_file_target_path, write_private_file};
@@ -217,7 +218,7 @@ impl Default for Config {
             || no_secrets_config
                 .get_param::<serde_yaml::Value>("GOOSE_DISABLE_KEYRING")
                 .is_ok_and(|v| keyring_disabled_value(&v));
-        let secrets = secret_storage(&config_dir, keyring_disabled, default_keyring_service());
+        let secrets = secret_storage(&config_dir, keyring_disabled, &default_keyring_service());
         Self {
             config_paths,
             secrets,
@@ -380,14 +381,19 @@ fn keyring_disabled_in_config(config_path: &Path) -> bool {
         .unwrap_or(false)
 }
 
+// Distributions set GOOSE_KEYRING_SERVICE so their secrets don't share a keychain entry
+// with a regular goose install on the same machine.
 #[cfg(feature = "system-keyring")]
-fn default_keyring_service() -> &'static str {
-    KEYRING_SERVICE
+fn default_keyring_service() -> String {
+    env::var("GOOSE_KEYRING_SERVICE")
+        .ok()
+        .filter(|service| !service.is_empty())
+        .unwrap_or_else(|| KEYRING_SERVICE.to_string())
 }
 
 #[cfg(not(feature = "system-keyring"))]
-fn default_keyring_service() -> &'static str {
-    ""
+fn default_keyring_service() -> String {
+    String::new()
 }
 
 fn secrets_file_path_in(config_dir: &Path) -> PathBuf {

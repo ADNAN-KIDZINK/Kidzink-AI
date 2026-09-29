@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
@@ -69,6 +70,7 @@ vi.mock('./acp/providers', () => ({
   acpReadDefaults: vi.fn().mockResolvedValue({ providerId: null, modelId: null }),
   acpSaveDefaults: vi.fn().mockResolvedValue(undefined),
   acpListProviderDetails: vi.fn().mockResolvedValue([]),
+  acpGetProviderDetails: vi.fn().mockResolvedValue({ name: 'openrouter', is_configured: false }),
 }));
 
 // Mock the ConfigContext module
@@ -270,7 +272,7 @@ describe('App Component - Brand New State', () => {
       expect(mockElectron.reactReady).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/^Welcome to goose/)).toBeInTheDocument();
+    expect(await screen.findByText(/^Welcome to Kidzink AI/)).toBeInTheDocument();
   });
 
   it('should not redirect when provider is configured', async () => {

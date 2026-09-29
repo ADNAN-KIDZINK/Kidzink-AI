@@ -1,10 +1,21 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const { resolve } = require('path');
+const brand = require('./src/distro/brand.json');
 
 const isLinuxVulkanBuild = process.env.GOOSE_DESKTOP_LINUX_VARIANT === 'vulkan';
 
 let cfg = {
+  name: brand.appName,
+  // macOS uses the executable name as the Finder/Dock display name, so keep the full app name there.
+  executableName: process.platform === 'darwin' ? brand.appName : brand.executableName,
+  appBundleId: brand.bundleId,
+  win32metadata: {
+    CompanyName: brand.companyName,
+    FileDescription: brand.appName,
+    ProductName: brand.appName,
+  },
   asar: true,
   extraResource: ['src/bin', 'src/images', 'src/app-update.yml'],
   icon: 'src/images/icon',
@@ -36,9 +47,9 @@ let cfg = {
     ],
     // Usage descriptions for macOS TCC (Transparency, Consent, and Control)
     NSMicrophoneUsageDescription:
-      'Goose needs access to your microphone for voice dictation.',
+      `${brand.appName} needs access to your microphone for voice dictation.`,
     NSAppleEventsUsageDescription:
-      'Goose needs access to send Apple Events to control other apps on your behalf.',
+      `${brand.appName} needs access to send Apple Events to control other apps on your behalf.`,
   },
 };
 
@@ -59,6 +70,15 @@ if (process.env.APPLE_TEAM_ID) {
 
 module.exports = {
   packagerConfig: cfg,
+  hooks: {
+    // package.json keeps upstream's productName to avoid merge conflicts with version bumps.
+    // Forge applies this hook both to what the makers read and to the packaged app's copy.
+    readPackageJson: async (_forgeConfig, packageJson) => ({
+      ...packageJson,
+      productName: brand.appName,
+      description: brand.appName,
+    }),
+  },
   rebuildConfig: {},
   publishers: [
     {
@@ -88,7 +108,7 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       config: {
         name: 'Goose',
-        bin: 'Goose',
+        bin: brand.executableName,
         maintainer: 'AAIF (Agentic AI Foundation)',
         homepage: 'https://goose-docs.ai/',
         categories: ['Development'],
@@ -104,7 +124,7 @@ module.exports = {
       name: '@electron-forge/maker-rpm',
       config: {
         name: 'Goose',
-        bin: 'Goose',
+        bin: brand.executableName,
         maintainer: 'AAIF (Agentic AI Foundation)',
         homepage: 'https://goose-docs.ai/',
         categories: ['Development'],
@@ -130,7 +150,7 @@ module.exports = {
           homepage: 'https://goose-docs.ai/',
           runtimeVersion: '25.08',
           baseVersion: '25.08',
-          bin: 'Goose',
+          bin: brand.executableName,
           modules: [
             {
               name: 'libbz2-shim',

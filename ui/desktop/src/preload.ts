@@ -1,9 +1,12 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import Electron, { contextBridge, ipcRenderer, webUtils } from 'electron';
 import { Recipe } from './recipe';
 import type { GooseApp } from './types/apps';
 import type { Settings, SettingKey } from './utils/settings';
 import { defaultSettings } from './utils/settings';
 import type { OpenExternalUrlResult } from './utils/urlSecurity';
+import type { KidzinkApi } from './distro/openrouterKey';
+import { VALIDATE_OPENROUTER_KEY_CHANNEL } from './distro/ipcChannels';
 
 // Mapping from settings keys to their old localStorage keys for lazy migration
 const localStorageKeyMap: Partial<Record<SettingKey, string>> = {
@@ -365,6 +368,9 @@ const appConfigAPI: AppConfigAPI = {
 // Expose the APIs
 contextBridge.exposeInMainWorld('electron', electronAPI);
 contextBridge.exposeInMainWorld('appConfig', appConfigAPI);
+contextBridge.exposeInMainWorld('kidzink', {
+  validateOpenRouterKey: (key: string) => ipcRenderer.invoke(VALIDATE_OPENROUTER_KEY_CHANNEL, key),
+} satisfies KidzinkApi);
 
 // Type declaration for TypeScript
 declare global {

@@ -1,0 +1,13 @@
+/* Kidzink brand accent. Values are set at runtime from brand.json by applyBrandTokens();
+   the fallbacks below only cover the moment before the renderer script runs. */
+@theme inline {
+  --color-brand: var(--kz-brand);
+  --color-brand-hover: var(--kz-brand-hover);
+  --color-on-brand: var(--kz-on-brand);
+}
+
+:root {
+  --kz-brand: #e43e2f;
+  --kz-brand-hover: #b92d22;
+  --kz-on-brand: #ffffff;
+}

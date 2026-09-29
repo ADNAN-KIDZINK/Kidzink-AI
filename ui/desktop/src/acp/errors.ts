@@ -1,5 +1,7 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { RequestError } from '@agentclientprotocol/sdk';
 import { errorMessage } from '../utils/conversionUtils';
+import { INVALID_KEY_MESSAGE } from '../distro/messages';
 
 export interface AcpCreditsExhaustedError {
   message: string;
@@ -59,7 +61,7 @@ export function parseAcpCreditsExhaustedError(error: unknown): AcpCreditsExhaust
 
 export function formatAcpError(error: unknown): string {
   if (error instanceof RequestError && error.code === AUTH_REQUIRED_CODE) {
-    return 'Sign in to your provider, then try again.';
+    return INVALID_KEY_MESSAGE;
   }
   return errorMessage(error);
 }

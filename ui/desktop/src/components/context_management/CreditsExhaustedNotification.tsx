@@ -1,8 +1,10 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import React from 'react';
 import { AlertTriangle, ExternalLink } from 'lucide-react';
 import type { Message, SystemNotificationContent } from '../../types/message';
 import { WEB_PROTOCOLS } from '../../utils/urlSecurity';
 import { defineMessages, useIntl } from '../../i18n';
+import { USAGE_LIMIT_MESSAGE, USAGE_LIMIT_TITLE } from '../../distro/messages';
 
 const i18n = defineMessages({
   insufficientCredits: {
@@ -63,10 +65,10 @@ export const CreditsExhaustedNotification: React.FC<CreditsExhaustedNotification
         <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5 shrink-0" />
         <div className="flex-1">
           <div className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
-            {intl.formatMessage(i18n.insufficientCredits)}
+            {USAGE_LIMIT_TITLE}
           </div>
           <div className="text-sm text-yellow-800/80 dark:text-yellow-200/80 mt-1">
-            {notification.msg}
+            {USAGE_LIMIT_MESSAGE}
           </div>
           {topUpUrl && (
             <button

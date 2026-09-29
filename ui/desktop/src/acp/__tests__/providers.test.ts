@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { methods } from '@agentclientprotocol/sdk';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getAcpClient } from '../acpConnection';
@@ -10,6 +11,10 @@ import {
   acpRefreshProviderDetails,
   acpSetSessionProviderModel,
 } from '../providers';
+
+// These tests cover upstream's provider-list logic; the distribution's OpenRouter-only filter
+// is tested in src/distro/providers.test.ts.
+vi.mock('../../distro/providers', () => ({ isDistroVisibleProvider: () => true }));
 
 vi.mock('../acpConnection', () => ({
   getAcpClient: vi.fn(),

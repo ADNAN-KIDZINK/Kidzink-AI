@@ -1,0 +1,4 @@
+# Each route authenticates itself (a Supabase user token, a key hash, or CRON_SECRET), so the
+# gateway's JWT check is off. That check would also reject Supabase's newer non-JWT publishable keys.
+[functions.kidzink-ai-key]
+verify_jwt = false

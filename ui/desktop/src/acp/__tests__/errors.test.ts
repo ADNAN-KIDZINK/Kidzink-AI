@@ -1,12 +1,12 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { describe, expect, it } from 'vitest';
 import { RequestError } from '@agentclientprotocol/sdk';
 import { formatAcpError, parseAcpCreditsExhaustedError } from '../errors';
+import { INVALID_KEY_MESSAGE } from '../../distro/messages';
 
 describe('formatAcpError', () => {
   it('explains how to recover from an authentication error', () => {
-    expect(formatAcpError(RequestError.authRequired())).toBe(
-      'Sign in to your provider, then try again.'
-    );
+    expect(formatAcpError(RequestError.authRequired())).toBe(INVALID_KEY_MESSAGE);
   });
 });
 

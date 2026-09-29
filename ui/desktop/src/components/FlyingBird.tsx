@@ -1,29 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Bird1, Bird2, Bird3, Bird4, Bird5, Bird6 } from './icons';
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
+import { KidzinkMark } from '../distro/KidzinkMark';
 
 interface FlyingBirdProps {
   className?: string;
-  cycleInterval?: number; // milliseconds between bird frame changes
+  cycleInterval?: number; // kept for call-site compatibility; the Kidzink mark pulses instead
 }
 
-const birdFrames = [Bird1, Bird2, Bird3, Bird4, Bird5, Bird6];
-
-export default function FlyingBird({ className = '', cycleInterval = 150 }: FlyingBirdProps) {
-  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFrameIndex((prevIndex) => (prevIndex + 1) % birdFrames.length);
-    }, cycleInterval);
-
-    return () => clearInterval(interval);
-  }, [cycleInterval]);
-
-  const CurrentFrame = birdFrames[currentFrameIndex];
-
+export default function FlyingBird({ className = '' }: FlyingBirdProps) {
   return (
-    <div className={`transition-opacity duration-75 ${className}`}>
-      <CurrentFrame className="w-4 h-4" />
+    <div className={`animate-pulse ${className}`}>
+      <KidzinkMark className="w-4 h-4" />
     </div>
   );
 }

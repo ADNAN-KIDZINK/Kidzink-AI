@@ -1,0 +1,43 @@
+# Upstream goose files that the Kidzink AI distribution modifies.
+# One repo-relative path per line. Keep this list in sync with DISTRO_NOTES.md.
+# scripts/sync-upstream.sh uses it to flag conflicts in our customizations and
+# to warn when upstream moves or deletes a file we depend on.
+ui/desktop/src/main.ts
+ui/desktop/src/images/icon.svg
+ui/desktop/src/images/glyph.svg
+ui/desktop/src/images/icon.png
+ui/desktop/src/images/icon@2x.png
+ui/desktop/src/images/icon-512.png
+ui/desktop/src/images/icon.ico
+ui/desktop/src/images/icon.icns
+ui/desktop/src/images/iconTemplate.png
+ui/desktop/src/images/iconTemplate@2x.png
+ui/desktop/src/images/iconTemplateUpdate.png
+ui/desktop/src/images/iconTemplateUpdate@2x.png
+ui/desktop/forge.config.ts
+ui/desktop/index.html
+ui/desktop/src/utils/autoUpdater.ts
+ui/desktop/src/i18n/index.ts
+ui/desktop/src/i18n/i18n.test.ts
+ui/desktop/src/theme/theme-tokens.ts
+ui/desktop/src/styles/main.css
+ui/desktop/src/components/ui/button.tsx
+ui/desktop/src/components/ui/switch.tsx
+ui/desktop/src/components/ChatInput.tsx
+ui/desktop/src/components/GooseSidebar/ThemeSelector.tsx
+ui/desktop/src/components/icons/Goose.tsx
+ui/desktop/src/components/icons/Geese.tsx
+ui/desktop/src/components/FlyingBird.tsx
+ui/desktop/src/components/settings/app/AppSettingsSection.tsx
+crates/goose/src/providers/openrouter_def.rs
+ui/desktop/src/preload.ts
+ui/desktop/src/App.tsx
+ui/desktop/src/App.test.tsx
+ui/desktop/src/acp/providers.ts
+ui/desktop/src/acp/errors.ts
+ui/desktop/src/acp/__tests__/errors.test.ts
+ui/desktop/src/acp/__tests__/providers.test.ts
+ui/desktop/src/components/BaseChat.tsx
+ui/desktop/src/components/context_management/CreditsExhaustedNotification.tsx
+crates/goose/src/config/base.rs
+crates/goose-providers/src/openrouter.rs

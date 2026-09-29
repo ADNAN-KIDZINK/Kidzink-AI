@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { useState, useEffect, useRef } from 'react';
 import { defineMessages, useIntl } from '../../../i18n';
 import { Switch } from '../../ui/switch';
@@ -21,6 +22,9 @@ import BlockLogoWhite from './icons/block-lockup_white.png';
 import TelemetrySettings from './TelemetrySettings';
 import { trackSettingToggled } from '../../../utils/analytics';
 import type { LanguageSetting } from '../../../utils/settings';
+import { DISTRO_FEATURES } from '../../../distro/features';
+import { KidzinkAboutCard } from '../../../distro/AboutCard';
+import { KidzinkApiKeyCard } from '../../../distro/ApiKeyCard';
 
 const i18n = defineMessages({
   appearanceTitle: { id: 'settings.appearance.title', defaultMessage: 'Appearance' },
@@ -476,68 +480,78 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
         </CardContent>
       </Card>
 
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{intl.formatMessage(i18n.languageTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.languageDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 px-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex w-full max-w-[260px] items-center justify-between gap-2 rounded-md border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-primary">
-              <span className="truncate">{intl.formatMessage(i18n[selectedLanguage.message])}</span>
-              <ChevronDown className="h-4 w-4 shrink-0" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-[260px]">
-              <DropdownMenuRadioGroup value={language} onValueChange={handleLanguageChange}>
-                {LANGUAGE_OPTIONS.map((option) => (
-                  <DropdownMenuRadioItem key={option.value} value={option.value}>
-                    {intl.formatMessage(i18n[option.message])}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardContent>
-      </Card>
+      {DISTRO_FEATURES.languagePicker && (
+        <Card className="rounded-lg">
+          <CardHeader className="pb-0">
+            <CardTitle className="mb-1">{intl.formatMessage(i18n.languageTitle)}</CardTitle>
+            <CardDescription>{intl.formatMessage(i18n.languageDesc)}</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4 px-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex w-full max-w-[260px] items-center justify-between gap-2 rounded-md border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-primary">
+                <span className="truncate">
+                  {intl.formatMessage(i18n[selectedLanguage.message])}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-[260px]">
+                <DropdownMenuRadioGroup value={language} onValueChange={handleLanguageChange}>
+                  {LANGUAGE_OPTIONS.map((option) => (
+                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                      {intl.formatMessage(i18n[option.message])}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardContent>
+        </Card>
+      )}
       <TelemetrySettings />
 
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{intl.formatMessage(i18n.helpTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.helpDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 px-4">
-          <div className="flex space-x-4">
-            <Button
-              onClick={() => {
-                window.open(
-                  'https://github.com/aaif-goose/goose/issues/new?template=bug_report.md',
-                  '_blank'
-                );
-              }}
-              variant="secondary"
-              size="sm"
-            >
-              {intl.formatMessage(i18n.reportBug)}
-            </Button>
-            <Button
-              onClick={() => {
-                window.open(
-                  'https://github.com/aaif-goose/goose/issues/new?template=feature_request.md',
-                  '_blank'
-                );
-              }}
-              variant="secondary"
-              size="sm"
-            >
-              {intl.formatMessage(i18n.requestFeature)}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {DISTRO_FEATURES.upstreamHelpCard && (
+        <Card className="rounded-lg">
+          <CardHeader className="pb-0">
+            <CardTitle className="mb-1">{intl.formatMessage(i18n.helpTitle)}</CardTitle>
+            <CardDescription>{intl.formatMessage(i18n.helpDesc)}</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4 px-4">
+            <div className="flex space-x-4">
+              <Button
+                onClick={() => {
+                  window.open(
+                    'https://github.com/aaif-goose/goose/issues/new?template=bug_report.md',
+                    '_blank'
+                  );
+                }}
+                variant="secondary"
+                size="sm"
+              >
+                {intl.formatMessage(i18n.reportBug)}
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(
+                    'https://github.com/aaif-goose/goose/issues/new?template=feature_request.md',
+                    '_blank'
+                  );
+                }}
+                variant="secondary"
+                size="sm"
+              >
+                {intl.formatMessage(i18n.requestFeature)}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <KidzinkApiKeyCard />
+
+      <KidzinkAboutCard />
 
       {/* Version Section - only show if GOOSE_VERSION is set */}
-      {!shouldShowUpdates && (
+      {DISTRO_FEATURES.upstreamVersionCard && !shouldShowUpdates && (
         <Card className="rounded-lg">
           <CardHeader className="pb-0">
             <CardTitle className="mb-1">{intl.formatMessage(i18n.versionTitle)}</CardTitle>

@@ -1,4 +1,6 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { AppEvents } from '../constants/events';
+import { APP_NAME, BRAND } from '../distro/brand';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from '../i18n';
 import { useLocation, useNavigate } from 'react-router';
@@ -476,14 +478,14 @@ export default function BaseChat({
           {/* Goose watermark - top right */}
           <div className="absolute top-[14px] right-4 z-[60] flex flex-row items-center gap-1">
             <a
-              href="https://goose-docs.ai"
+              href={BRAND.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="no-drag flex flex-row items-center gap-1 hover:opacity-80 transition-opacity"
             >
               <Goose className="size-5 goose-icon-animation" />
               <span className="text-sm leading-none text-text-secondary -translate-y-px">
-                goose
+                {APP_NAME}
               </span>
             </a>
             <EnvironmentBadge className="translate-y-px" />

@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { autoUpdater, UpdateInfo } from 'electron-updater';
 import {
   BrowserWindow,
@@ -15,6 +16,7 @@ import log from './logger';
 import { githubUpdater } from './githubUpdater';
 import { loadRecentDirs } from './recentDirs';
 import { errorMessage } from './conversionUtils';
+import { APP_NAME } from '../distro/brand';
 import {
   trackUpdateCheckStarted,
   trackUpdateCheckCompleted,
@@ -646,7 +648,7 @@ export function setupAutoUpdater(tray?: Tray) {
     // Show native notification
     const notification = new Notification({
       title: 'Update Ready',
-      body: `Version ${info.version} will be installed when you quit Goose. Click to install now.`,
+      body: `Version ${info.version} will be installed when you quit ${APP_NAME}. Click to install now.`,
     });
     notification.show();
 
@@ -737,7 +739,7 @@ function updateTrayIcon(hasUpdate: boolean) {
     } else {
       iconPath = path.join(process.resourcesPath, 'images', 'iconTemplateUpdate.png');
     }
-    trayRef.setToolTip('Goose - Update Available');
+    trayRef.setToolTip(`${APP_NAME} - Update Available`);
   } else {
     // Use normal icon
     if (isDev) {
@@ -745,7 +747,7 @@ function updateTrayIcon(hasUpdate: boolean) {
     } else {
       iconPath = path.join(process.resourcesPath, 'images', 'iconTemplate.png');
     }
-    trayRef.setToolTip('Goose');
+    trayRef.setToolTip(APP_NAME);
   }
 
   const icon = nativeImage.createFromPath(iconPath);

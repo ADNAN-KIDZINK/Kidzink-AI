@@ -1,0 +1,28 @@
+{
+  "companyName": "Kidzink",
+  "appName": "Kidzink AI",
+  "executableName": "kidzink-ai",
+  "bundleId": "com.kidzink.ai",
+  "websiteUrl": "https://kidzink.com",
+  "supportContact": "adnan@kidzink.com",
+  "font": "Poppins",
+  "colors": {
+    "light": {
+      "primary": "#e43e2f",
+      "primaryHover": "#b92d22",
+      "onPrimary": "#ffffff"
+    },
+    "dark": {
+      "primary": "#ff5244",
+      "primaryHover": "#ff6b5a",
+      "onPrimary": "#ffffff"
+    }
+  },
+  "provider": "openrouter",
+  "defaultModel": "anthropic/claude-sonnet-5",
+  "allowedModels": [],
+  "releases": {
+    "githubOwner": "ADNAN-KIDZINK",
+    "githubRepo": "Kidzink-AI"
+  }
+}

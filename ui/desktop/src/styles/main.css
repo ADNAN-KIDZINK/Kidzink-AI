@@ -1,9 +1,11 @@
+/* Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md). */
 /* ═══════════════════════════════════════════════════════════
    1. TAILWIND IMPORTS & CONFIG
    ═══════════════════════════════════════════════════════════ */
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '../distro/theme.css';
 @plugin '@tailwindcss/typography';
 
 @source '../../index.html';

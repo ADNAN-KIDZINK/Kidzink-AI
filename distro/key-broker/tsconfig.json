@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "types": [],
+    "paths": {
+      "vitest": [
+        "../../ui/node_modules/vitest"
+      ]
+    }
+  },
+  "include": [
+    "supabase/functions/kidzink-ai-key/core.ts",
+    "supabase/functions/kidzink-ai-key/crypto.ts",
+    "supabase/functions/kidzink-ai-key/openrouter.ts",
+    "test/**/*.ts"
+  ]
+}

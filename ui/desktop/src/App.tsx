@@ -1,6 +1,8 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { useEffect, useState, useRef, type RefObject } from 'react';
 import { IpcRendererEvent } from 'electron';
 import { HashRouter, Routes, Route, useNavigate, useLocation, useSearchParams } from 'react-router';
+import KidzinkKeyGuard from './distro/KidzinkKeyGuard';
 import { importNostrSessionFromDeepLink } from './sessionLinks';
 import { ErrorUI } from './components/ErrorBoundary';
 import { ExtensionInstallModal } from './components/ExtensionInstallModal';
@@ -14,7 +16,6 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 import AnnouncementModal from './components/AnnouncementModal';
 import TelemetryConsentPrompt from './components/TelemetryConsentPrompt';
-import OnboardingGuard from './components/onboarding/OnboardingGuard';
 import { createSession } from './sessions';
 import { acpListSessions, acpDeleteSession } from './acp/sessions';
 
@@ -677,11 +678,11 @@ export function AppInner() {
             <Route
               path="/"
               element={
-                <OnboardingGuard>
+                <KidzinkKeyGuard>
                   <ChatProvider chat={chat} setChat={setChat} contextKey="hub">
                     <AppLayout activeSessions={activeSessions} liveVoice={liveVoice} />
                   </ChatProvider>
-                </OnboardingGuard>
+                </KidzinkKeyGuard>
               }
             >
               <Route

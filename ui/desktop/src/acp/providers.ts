@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import type {
   CanonicalModelInfoDto,
   CustomProviderCreateRequest_unstable,
@@ -15,6 +16,7 @@ import type {
   UpdateCustomProviderRequest,
 } from '../types/providers';
 import { getAcpClient } from './acpConnection';
+import { isDistroVisibleProvider } from '../distro/providers';
 
 export type { CanonicalModelInfoDto, ProviderSecretDto };
 
@@ -99,7 +101,7 @@ function updateRequestToCreate(
 export async function acpListProviderDetails(): Promise<ProviderDetails[]> {
   const client = await getAcpClient();
   const { entries } = await client.goose.providersList_unstable({});
-  return entries.map(providerEntryToDetails);
+  return entries.map(providerEntryToDetails).filter(isDistroVisibleProvider);
 }
 
 export async function acpListSetupProviderDetails(): Promise<ProviderDetails[]> {

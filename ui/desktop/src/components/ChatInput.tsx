@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { AppEvents } from '../constants/events';
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { ArrowUp, Bug, ScrollText } from 'lucide-react';
@@ -1905,10 +1906,9 @@ export default function ChatInput({
                   aria-label={intl.formatMessage(i18n.send)}
                   onClick={onFormSubmit}
                   className={cn(
-                    'bg-background-tertiary',
                     isSubmitButtonDisabled
-                      ? 'text-text-secondary cursor-not-allowed opacity-60'
-                      : 'text-text-primary hover:bg-background-tertiary/70 hover:cursor-pointer'
+                      ? 'bg-background-tertiary text-text-secondary cursor-not-allowed opacity-60'
+                      : 'bg-brand text-on-brand hover:bg-brand-hover hover:cursor-pointer'
                   )}
                 >
                   <ArrowUp className="w-4 h-4" strokeWidth={2.25} />

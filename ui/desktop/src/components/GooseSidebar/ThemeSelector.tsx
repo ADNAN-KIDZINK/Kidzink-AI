@@ -1,5 +1,6 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import React from 'react';
-import { Moon, Sliders, Sparkles, Sun } from 'lucide-react';
+import { Moon, Sliders, Sun } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useTheme } from '../../contexts/ThemeContext';
 import { defineMessages, useIntl } from '../../i18n';
@@ -45,7 +46,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
     <div className={`${!horizontal ? 'px-1 py-2 space-y-2' : ''} ${className}`}>
       {!hideTitle && <div className="text-xs text-text-primary px-3">{intl.formatMessage(i18n.theme)}</div>}
       <div
-        className={`${horizontal ? 'flex' : 'grid grid-cols-4'} gap-1 ${!horizontal ? 'px-3' : ''}`}
+        className={`${horizontal ? 'flex' : 'grid grid-cols-3'} gap-1 ${!horizontal ? 'px-3' : ''}`}
       >
         <Button
           data-testid="light-mode-button"
@@ -75,21 +76,6 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         >
           <Moon className="h-3 w-3" />
           <span>{intl.formatMessage(i18n.dark)}</span>
-        </Button>
-
-        <Button
-          data-testid="aura-mode-button"
-          onClick={() => setUserThemePreference('aura')}
-          className={`flex items-center justify-center gap-1 p-2 rounded-md border transition-colors text-xs ${
-            userThemePreference === 'aura'
-              ? 'bg-background-inverse text-text-inverse border-text-inverse hover:!bg-background-inverse hover:!text-text-inverse'
-              : 'border-border-primary hover:!bg-background-secondary text-text-secondary hover:text-text-primary'
-          }`}
-          variant="ghost"
-          size="sm"
-        >
-          <Sparkles className="h-3 w-3" />
-          <span>{intl.formatMessage(i18n.aura)}</span>
         </Button>
 
         <Button

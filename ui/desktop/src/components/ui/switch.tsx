@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import * as React from 'react';
 import * as SwitchPrimitives from '@radix-ui/react-switch';
 import { cn } from '../../utils';
@@ -12,7 +13,7 @@ export const Switch = React.forwardRef<
     className={cn(
       'peer inline-flex h-[16px] w-[28px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
       variant === 'default'
-        ? 'data-[state=checked]:bg-background-primary data-[state=unchecked]:bg-input'
+        ? 'data-[state=checked]:bg-brand data-[state=unchecked]:bg-input'
         : 'data-[state=checked]:bg-slate-900 dark:data-[state=checked]:bg-white data-[state=unchecked]:bg-slate-300 dark:data-[state=unchecked]:bg-slate-600',
       className
     )}
