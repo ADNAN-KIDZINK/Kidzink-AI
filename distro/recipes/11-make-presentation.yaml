@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Make a presentation
+description: Plan a deck together, then get the PowerPoint file.
+instructions: |
+  Help the person create a presentation. Agree the audience, key message and slide outline in the chat before building the file.
+  Load the powerpoint-slides skill with load_skill before starting, and follow it.
+activities:
+  - "message: What's the presentation for, who's the audience, and what should they take away? Paste any content you have."
+  - Turn this document into a short deck
+  - A client pitch for a new school project
+  - A 5-slide update for leadership

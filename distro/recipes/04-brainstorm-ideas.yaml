@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Brainstorm ideas
+description: Get a wide range of ideas, then a shortlist.
+instructions: |
+  Help the person generate and develop ideas.
+  Load the brainstorming skill with load_skill before starting, and follow it.
+activities:
+  - "message: What do you need ideas for? Tell me the goal and any limits (budget, audience, timing)."
+  - Ideas for a classroom of the future concept
+  - Names for a new furniture range
+  - Ideas for a client workshop

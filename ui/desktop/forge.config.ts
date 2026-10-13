@@ -17,7 +17,16 @@ let cfg = {
     ProductName: brand.appName,
   },
   asar: true,
-  extraResource: ['src/bin', 'src/images', 'src/app-update.yml'],
+  // distro/{config,recipes,skills,launchers} land in Resources/<name> (see src/distro/mainProcess.ts).
+  extraResource: [
+    'src/bin',
+    'src/images',
+    'src/app-update.yml',
+    '../../distro/config',
+    '../../distro/recipes',
+    '../../distro/skills',
+    '../../distro/launchers',
+  ],
   icon: 'src/images/icon',
   // Windows specific configuration
   win32: {

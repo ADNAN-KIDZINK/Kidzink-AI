@@ -7,11 +7,17 @@ import { toastError } from '../toasts';
 import { ApiKeyForm } from './ApiKeyForm';
 import { APP_NAME, BRAND } from './brand';
 import { KidzinkMark } from './KidzinkMark';
+import { isDistroAdmin } from './admin';
+import { applyDistroExtensionPolicy } from './extensionPolicy';
 
 type GuardState = 'checking' | 'server-error' | 'needs-key' | 'ready';
 
 // Keeps the saved default on OpenRouter and, when an allowlist is configured, on an allowed model.
+// Admins may switch to other providers and models, so theirs is left alone.
 export async function ensureDistroDefaults(): Promise<void> {
+  if (isDistroAdmin()) {
+    return;
+  }
   const { providerId, modelId } = await acpReadDefaults();
   const modelAllowed =
     !!modelId && (BRAND.allowedModels.length === 0 || BRAND.allowedModels.includes(modelId));
@@ -31,7 +37,7 @@ export function warnIfNoUsageLeft(limitRemaining: number | null): void {
 
 // Replaces upstream's OnboardingGuard: staff only ever set up a personal OpenRouter key.
 export default function KidzinkKeyGuard({ children }: { children: React.ReactNode }) {
-  const { upsert } = useConfig();
+  const { upsert, getExtensions } = useConfig();
   const { refreshCurrentModelAndProvider } = useModelAndProvider();
   const [state, setState] = useState<GuardState>('checking');
 
@@ -45,7 +51,7 @@ export default function KidzinkKeyGuard({ children }: { children: React.ReactNod
           return;
         }
         await ensureDistroDefaults();
-        await refreshCurrentModelAndProvider();
+        await applyStaffSetup();
         setState('ready');
         return;
       } catch (error) {
@@ -61,6 +67,13 @@ export default function KidzinkKeyGuard({ children }: { children: React.ReactNod
     setState('server-error');
   };
 
+  // Hub builds new chats from the context's extension list, so it has to reflect the policy.
+  const applyStaffSetup = async () => {
+    await applyDistroExtensionPolicy();
+    await getExtensions(true);
+    await refreshCurrentModelAndProvider();
+  };
+
   useEffect(() => {
     check();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +83,7 @@ export default function KidzinkKeyGuard({ children }: { children: React.ReactNod
     await acpSaveDefaults(BRAND.provider, BRAND.defaultModel);
     // Answers the telemetry question up front so the upstream consent prompt never appears.
     await upsert('GOOSE_TELEMETRY_ENABLED', false, false).catch(() => {});
-    await refreshCurrentModelAndProvider();
+    await applyStaffSetup();
     warnIfNoUsageLeft(limitRemaining);
     setState('ready');
   };

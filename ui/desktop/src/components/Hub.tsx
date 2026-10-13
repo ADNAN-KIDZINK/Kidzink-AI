@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 /**
  * Hub Component
  *
@@ -32,6 +33,7 @@ import { acpGetLiveVoiceAvailability } from '../acp/liveVoice';
 import type { LiveVoiceAvailabilityResponse_unstable } from '@aaif/goose-acp-client';
 import { subscribeToAcpRecovery } from '../acp/acpConnection';
 import type { LiveVoiceController } from '../liveVoice/useLiveVoice';
+import { RecipeCards } from '../distro/RecipeCards';
 
 const i18n = defineMessages({
   goodMorning: { id: 'hub.goodMorning', defaultMessage: 'Good morning' },
@@ -263,6 +265,10 @@ export default function Hub({
             }}
           />
         </ChatInputCard>
+        <RecipeCards
+          setView={setView}
+          workingDir={userSelectedWorkingDirRef.current ? workingDir : undefined}
+        />
       </div>
 
       {isCreatingSession && (

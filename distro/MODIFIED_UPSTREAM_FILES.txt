@@ -41,3 +41,13 @@ ui/desktop/src/components/BaseChat.tsx
 ui/desktop/src/components/context_management/CreditsExhaustedNotification.tsx
 crates/goose/src/config/base.rs
 crates/goose-providers/src/openrouter.rs
+ui/desktop/src/components/settings/models/predefinedModelsUtils.ts
+ui/desktop/src/components/settings/models/bottom_bar/ModelsBottomBar.tsx
+ui/desktop/src/components/settings/models/subcomponents/SwitchModelModal.tsx
+ui/desktop/src/components/settings/models/bottom_bar/ModelsBottomBar.test.tsx
+ui/desktop/src/components/Hub.tsx
+ui/desktop/src/components/Layout/NavigationPanel.tsx
+ui/desktop/src/components/settings/SettingsView.tsx
+ui/desktop/src/components/settings/chat/ChatSettingsSection.tsx
+ui/desktop/src/updates.ts
+.gitignore

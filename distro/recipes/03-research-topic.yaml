@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Research a topic
+description: Find current information on the web, with sources.
+instructions: |
+  Help the person research a topic on the web and report back with sources.
+  Load the research skill with load_skill before starting, and follow it.
+activities:
+  - "message: What would you like me to look into? I'll search the web and give you the answer with links."
+  - Find suppliers of classroom acoustic panels in the UAE
+  - What are the latest trends in school library design?
+  - Summarise recent news about a company

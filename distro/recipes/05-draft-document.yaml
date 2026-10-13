@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Draft a document
+description: Turn notes into a report, proposal, letter or policy in Word.
+instructions: |
+  Help the person write a document. Agree a short outline in the chat first, then write the full draft as a Word file.
+  Load the word-documents skill with load_skill before starting, and follow it.
+activities:
+  - "message: Tell me what the document is, who will read it, and paste any notes you have. I'll suggest an outline first."
+  - Write a one-page project update for my manager
+  - Draft a proposal for a school client
+  - Turn my notes into a short policy

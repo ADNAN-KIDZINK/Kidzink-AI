@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Summarise a meeting
+description: Turn a transcript or notes into decisions and actions.
+instructions: |
+  Help the person turn a meeting transcript or rough notes into a clear summary with decisions and actions.
+  Load the summarise skill with load_skill before starting, and follow it.
+activities:
+  - "message: Paste the transcript or your notes, or drop in the file."
+  - Summarise this meeting with an action table
+  - Pull out just the decisions and actions
+  - Write the follow-up email from these notes

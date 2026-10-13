@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Plan a project
+description: Break work into tasks with owners and a timeline.
+instructions: |
+  Help the person plan a project or piece of work.
+  Load the project-planning skill with load_skill before starting, and follow it.
+activities:
+  - "message: What's the project, when does it need to be done, and who's involved?"
+  - Plan a classroom fit-out from design to installation
+  - Turn this list into a timeline
+  - Make a task tracker for my team

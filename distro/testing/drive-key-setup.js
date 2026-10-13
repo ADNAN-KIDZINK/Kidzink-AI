@@ -91,6 +91,58 @@ async function sendChat(page, text) {
     await shot(page, '06b-about');
   }
 
+  if (scenario === 'models') {
+    step('model tier label and picker');
+    await page.evaluate(() => (window.location.hash = '#/'));
+    const trigger = page.getByText(/^(Low|Medium|High)$/).first();
+    await trigger.waitFor({ timeout: 30000 });
+    await shot(page, '08-tier-label');
+    await trigger.click();
+    await page.getByText('Change Model').click();
+    await page.getByText('Most capable. Complex documents and analysis.').waitFor({ timeout: 30000 });
+    await shot(page, '09-tier-picker');
+    const dialog = (await page.getByRole('dialog').innerText()).replace(/\s+/g, ' ');
+    console.log('dialog:', dialog);
+    console.log('model slug visible:', /anthropic\/|claude|openrouter/i.test(dialog));
+  }
+
+  if (scenario === 'staff') {
+    step('key setup if needed');
+    if (await page.getByText(/^Welcome to Kidzink AI/).isVisible({ timeout: 15000 }).catch(() => false)) {
+      await enterKey(page, 'sk-or-v1-good');
+    }
+
+    step('home recipe cards');
+    await page.getByText('Or start with a task').waitFor({ timeout: 60000 });
+    await shot(page, '10-home-cards');
+    const cards = await page.locator('button[title]').allInnerTexts();
+    console.log('cards:', cards.map((c) => c.split('\n')[0]).join(' | '));
+    for (const label of ['Recipes', 'Skills', 'Apps', 'Scheduler', 'Extensions', 'Session History']) {
+      console.log(`sidebar shows ${label}:`, (await page.getByText(label, { exact: true }).count()) > 0);
+    }
+
+    step('settings tabs');
+    await page.evaluate(() => (window.location.hash = '#/settings'));
+    await page.getByRole('tab').first().waitFor({ timeout: 30000 });
+    console.log('tabs:', (await page.getByRole('tab').allInnerTexts()).join(' | '));
+    console.log('mode section visible:', await page.getByText('Default Mode').isVisible());
+    await shot(page, '11-settings-tabs');
+
+    step('hidden page redirects home');
+    await page.evaluate(() => (window.location.hash = '#/extensions'));
+    await page.waitForTimeout(1500);
+    console.log('after #/extensions:', await page.evaluate(() => window.location.hash));
+
+    step('start a recipe');
+    await page.evaluate(() => (window.location.hash = '#/'));
+    await page.getByText('Make a spreadsheet', { exact: true }).click();
+    await page.getByText(/Tell me what the spreadsheet is for/).waitFor({ timeout: 60000 });
+    await shot(page, '12-recipe-chat');
+    await page.getByText(/^A project tracker/).first().click();
+    await page.getByText('OpenRouter.').last().waitFor({ timeout: 60000 });
+    await shot(page, '13-recipe-reply');
+  }
+
   if (scenario === 'chat') {
     step('new chat');
     await page.evaluate(() => (window.location.hash = '#/'));

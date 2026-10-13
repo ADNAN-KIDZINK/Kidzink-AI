@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Prepare for a meeting
+description: Agenda, briefing, talking points and likely questions.
+instructions: |
+  Help the person prepare for an upcoming meeting or presentation.
+  Load the meeting-prep skill with load_skill before starting, and follow it.
+activities:
+  - "message: Tell me about the meeting: who it's with, what it's about, and what a good outcome looks like."
+  - Write an agenda for a project kickoff
+  - Prepare talking points for a client meeting
+  - What questions might the owner ask about this plan?

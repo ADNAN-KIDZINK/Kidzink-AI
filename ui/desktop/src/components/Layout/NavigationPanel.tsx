@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { AudioLines, ChevronDown, ChevronRight } from 'lucide-react';
@@ -20,6 +21,7 @@ import { formatMessageTimestamp } from '../../utils/timeUtils';
 import { cn } from '../../utils';
 import type { ProjectGroup } from '../../utils/projectSessions';
 import { defineMessages, useIntl } from '../../i18n';
+import { isDistroNavItemVisible } from '../../distro/admin';
 
 type StreamState = 'idle' | 'loading' | 'streaming' | 'error';
 
@@ -250,6 +252,7 @@ export const Navigation: React.FC<{
 
   const visibleItems = useMemo<NavItem[]>(() => {
     return NAV_ITEMS.filter((item) => {
+      if (!isDistroNavItemVisible(item.id)) return false;
       if (item.path === '/apps') return appsExtensionEnabled;
       return true;
     });

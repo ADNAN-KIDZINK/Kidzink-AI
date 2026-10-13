@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Write an email
+description: Draft a clear, professional email or message from a few notes.
+instructions: |
+  Help the person write an email or message, or improve one they've drafted.
+  Load the emails-and-messages skill with load_skill before starting, and follow it.
+activities:
+  - "message: Tell me who it's for and what you want to say. Rough notes are fine, or paste a draft to improve."
+  - Reply politely to a customer complaint
+  - Ask a supplier for an updated quote
+  - Follow up after a meeting with the agreed actions

@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Bot, ExternalLink } from 'lucide-react';
 import { defineMessages, useIntl } from '../../../../i18n';
@@ -27,6 +28,7 @@ import Model, {
   getProviderMetadata,
 } from '../modelInterface';
 import { getPredefinedModelsFromEnv, shouldShowPredefinedModels } from '../predefinedModelsUtils';
+import { DISTRO_FEATURES } from '../../../../distro/features';
 import type { ProviderDetails, ProviderType, ThinkingEffort } from '../../../../types/providers';
 import { trackModelChanged } from '../../../../utils/analytics';
 import { addToRecentModels } from '../../../../utils/recentModels';
@@ -783,8 +785,12 @@ export const SwitchModelModal = ({
                         </div>
                         <div className="flex items-center gap-2 mt-[2px]">
                           <span className="text-xs text-text-secondary">{model.subtext}</span>
-                          <span className="text-xs text-text-secondary">•</span>
-                          <span className="text-xs text-text-secondary">{model.provider}</span>
+                          {DISTRO_FEATURES.predefinedModelProvider && (
+                            <>
+                              <span className="text-xs text-text-secondary">•</span>
+                              <span className="text-xs text-text-secondary">{model.provider}</span>
+                            </>
+                          )}
                         </div>
                       </div>
 

@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Make a spreadsheet
+description: Describe what you need and get a ready-to-use Excel file.
+instructions: |
+  Help the person create a new spreadsheet from their description. Ask at most two short questions if the request is unclear.
+  Load the excel-spreadsheets skill with load_skill before starting, and follow it.
+activities:
+  - "message: Tell me what the spreadsheet is for and what it should track."
+  - A project tracker with tasks, owners, due dates and status
+  - A budget with planned and actual costs
+  - A stock list with quantities and values

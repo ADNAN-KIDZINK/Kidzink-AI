@@ -124,9 +124,12 @@ grant execute on function kidzink_ai.is_admin() to authenticated;
 -- ============================================================================
 -- 5. Example rows (edit before running, or add rows later in the Table Editor)
 -- ============================================================================
+-- Groups list the slugs behind the app's Low / Medium / High tiers (`modelTiers` in brand.json);
+-- staff only ever see the tier labels.
 -- insert into kidzink_ai.model_groups (code, name, models, default_model) values
---     ('standard', 'Standard', array['anthropic/claude-sonnet-5', 'anthropic/claude-haiku-4.5'], 'anthropic/claude-sonnet-5'),
---     ('power', 'Power users', array['anthropic/claude-sonnet-5', 'anthropic/claude-haiku-4.5', 'anthropic/claude-opus-5.5'], 'anthropic/claude-sonnet-5');
+--     ('low', 'Low only', array['anthropic/claude-haiku-4.5'], 'anthropic/claude-haiku-4.5'),
+--     ('standard', 'Low + Medium', array['anthropic/claude-haiku-4.5', 'anthropic/claude-sonnet-5'], 'anthropic/claude-sonnet-5'),
+--     ('power', 'All tiers', array['anthropic/claude-haiku-4.5', 'anthropic/claude-sonnet-5', 'anthropic/claude-opus-5.5'], 'anthropic/claude-sonnet-5');
 --
 -- insert into kidzink_ai.entitlements (email, full_name, monthly_limit_usd, model_group) values
 --     ('adnan@kidzink.com', 'Adnan', 20, 'power');

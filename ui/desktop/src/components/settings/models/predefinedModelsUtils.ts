@@ -1,4 +1,6 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import Model from './modelInterface';
+import { distroModelDisplayName } from '../../../distro/models';
 
 // Helper functions for predefined models - shared across components
 export function getPredefinedModelsFromEnv(): Model[] {
@@ -20,7 +22,7 @@ export function shouldShowPredefinedModels(): boolean {
 export function getModelDisplayName(modelName: string): string {
   const predefinedModels = getPredefinedModelsFromEnv();
   const matchingModel = predefinedModels.find((model) => model.name === modelName);
-  return matchingModel?.alias || modelName;
+  return matchingModel?.alias || distroModelDisplayName(modelName);
 }
 
 export function getProviderDisplayName(modelName: string): string {

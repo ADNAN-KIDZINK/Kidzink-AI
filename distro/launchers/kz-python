@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Runs a Python script with Kidzink AI's standard libraries, through the app's bundled uvx.
+#   kz-python script.py [args...]
+#   kz-python -c "python code"
+# The first run on a computer downloads Python and the libraries; later runs reuse the cache.
+# Keep the library list in sync with kz-python.cmd.
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  echo "usage: kz-python <script.py> [args...]  or  kz-python -c \"code\"" >&2
+  exit 2
+fi
+
+# The macOS uvx shim changes directory before running, so pin uv to the caller's folder;
+# relative script and file paths then work as expected.
+exec uvx --quiet --directory "$PWD" \
+  --with openpyxl --with python-docx --with python-pptx \
+  --with pypdf --with pdfplumber --with pandas \
+  python "$@"

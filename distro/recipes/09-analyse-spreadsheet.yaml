@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Analyse a spreadsheet
+description: Clean up a sheet or work out totals and trends.
+instructions: |
+  Help the person clean up or analyse a spreadsheet or CSV. Never change the original file.
+  Load the excel-spreadsheets skill with load_skill before starting, and follow it.
+activities:
+  - "message: Drag your spreadsheet into the chat, then tell me what you'd like to know or fix."
+  - Find and remove duplicate rows
+  - Summarise the totals by month
+  - Which items cost the most?

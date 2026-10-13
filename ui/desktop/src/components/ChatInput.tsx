@@ -14,6 +14,7 @@ import { DirSwitcher } from './bottom_menu/DirSwitcher';
 import { GitBranchIndicator } from './GitBranchIndicator';
 import ModelsBottomBar from './settings/models/bottom_bar/ModelsBottomBar';
 import { BottomMenuExtensionSelection } from './bottom_menu/BottomMenuExtensionSelection';
+import { isDistroAdmin } from '../distro/admin';
 import { cn } from '../utils';
 import { AlertType, useAlerts } from './alerts';
 import { useModelAndProvider } from './ModelAndProviderContext';
@@ -1766,11 +1767,13 @@ export default function ChatInput({
             />
 
             {/* Right: extension selector */}
-            <BottomMenuExtensionSelection
-              sessionId={sessionId}
-              nextChatExtensionDraft={nextChatExtensionDraft}
-              onNextChatExtensionDraftChange={onNextChatExtensionDraftChange}
-            />
+            {isDistroAdmin() && (
+              <BottomMenuExtensionSelection
+                sessionId={sessionId}
+                nextChatExtensionDraft={nextChatExtensionDraft}
+                onNextChatExtensionDraftChange={onNextChatExtensionDraftChange}
+              />
+            )}
 
             {/* Right: diagnostics */}
             {sessionId && (

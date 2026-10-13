@@ -25,7 +25,12 @@ import fsSync from 'node:fs';
 import started from 'electron-squirrel-startup';
 import path from 'node:path';
 import { APP_NAME } from './distro/brand';
-import { applyDistroBundledEnv, distroBackendEnv, registerDistroIpc } from './distro/mainProcess';
+import {
+  applyDistroBundledEnv,
+  distroBackendEnv,
+  isDistroAdmin,
+  registerDistroIpc,
+} from './distro/mainProcess';
 import os from 'node:os';
 import { execFileSync, spawn, execFile } from 'child_process';
 import 'dotenv/config';
@@ -1837,6 +1842,10 @@ interface RecipeDeeplinkData {
 }
 
 function parseRecipeDeeplink(url: string): RecipeDeeplinkData | undefined {
+  // Shared recipes can add extensions that run commands; only admins may open them.
+  if (!isDistroAdmin()) {
+    return undefined;
+  }
   const parsedUrl = new URL(url);
   let recipeDeeplink = parsedUrl.searchParams.get('config');
   if (recipeDeeplink && !url.includes(recipeDeeplink)) {

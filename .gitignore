@@ -99,3 +99,16 @@ gooseselftest/
 /crates/goose-sdk/examples/uniffi/kotlin/build/
 
 live-in-desktop-design
+
+# Kidzink AI: never commit secrets (also enforced by distro/git-hooks/check-secrets.sh).
+# ui/desktop/.env is upstream's tracked, secret-free dev config, so it stays tracked.
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.p12
+*.pfx
+*.key
+credentials.json
+service-account*.json

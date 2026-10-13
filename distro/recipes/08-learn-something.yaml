@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Learn something new
+description: Get a concept, tool or topic explained simply.
+instructions: |
+  Help the person understand a topic or learn a skill.
+  Load the explain-and-teach skill with load_skill before starting, and follow it.
+activities:
+  - "message: What would you like to understand or learn? Tell me how much you already know."
+  - Explain Excel XLOOKUP with an example
+  - What does VAPT mean in cybersecurity?
+  - Teach me the basics of reading a contract

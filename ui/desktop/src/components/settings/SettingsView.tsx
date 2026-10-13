@@ -1,5 +1,13 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { ScrollArea } from '../ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  useDistroSettingsTab,
+} from '../../distro/settingsTabs';
+import { isDistroAdmin } from '../../distro/admin';
 import { View, ViewOptions } from '../../utils/navigationUtils';
 import ModelsSection from './models/ModelsSection';
 import ExternalBackendSection from './app/ExternalBackendSection';
@@ -18,7 +26,7 @@ import {
   HardDrive,
   KeyRound,
 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ChatSettingsSection from './chat/ChatSettingsSection';
 import KeyboardShortcutsSection from './keyboard/KeyboardShortcutsSection';
 import AuthSettingsSection from './auth/AuthSettingsSection';
@@ -87,7 +95,7 @@ export default function SettingsView({
   setView: (view: View, viewOptions?: ViewOptions) => void;
   viewOptions: SettingsViewOptions;
 }) {
-  const [activeTab, setActiveTab] = useState('models');
+  const [activeTab, setActiveTab] = useDistroSettingsTab('models');
   const hasTrackedInitialTab = useRef(false);
   const { localInference } = useFeatures();
   const { navWidth } = useNavigationContext();
@@ -134,14 +142,14 @@ export default function SettingsView({
         setActiveTab(targetTab);
       }
     }
-  }, [viewOptions.section, localInference]);
+  }, [viewOptions.section, localInference, setActiveTab]);
 
   // Reset active tab if local-inference becomes unavailable
   useEffect(() => {
     if (!localInference && activeTab === 'local-inference') {
       setActiveTab('models');
     }
-  }, [localInference, activeTab]);
+  }, [localInference, activeTab, setActiveTab]);
 
   useEffect(() => {
     if (!hasTrackedInitialTab.current) {
@@ -324,7 +332,7 @@ export default function SettingsView({
                 className="mt-0 focus-visible:outline-none focus-visible:ring-0"
               >
                 <div className="space-y-8">
-                  {CONFIGURATION_ENABLED && <ConfigSettings />}
+                  {CONFIGURATION_ENABLED && isDistroAdmin() && <ConfigSettings />}
                   <AppSettingsSection scrollToSection={viewOptions.section} />
                 </div>
               </TabsContent>

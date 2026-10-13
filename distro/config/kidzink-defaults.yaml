@@ -1,0 +1,18 @@
+# Kidzink AI defaults, layered under each person's config.yaml through
+# GOOSE_ADDITIONAL_CONFIG_FILES (set in ui/desktop/src/distro/mainProcess.ts).
+# The person's own config.yaml wins field by field, except available_tools, which
+# the desktop app never writes there. Platform extensions (developer, apps, ...)
+# can't be switched on or off here: see ui/desktop/src/distro/extensionPolicy.ts.
+extensions:
+  computercontroller:
+    enabled: true
+    type: builtin
+    name: computercontroller
+    display_name: Computer Controller
+    description: General computer control tools that don't require you to be a developer or engineer.
+    timeout: 300
+    # Reads spreadsheets, Word documents and PDFs without Python. Screen control stays off.
+    available_tools:
+      - xlsx_tool
+      - docx_tool
+      - pdf_tool

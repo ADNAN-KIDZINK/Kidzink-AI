@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Summarise a document
+description: Get the key points of a PDF, Word file or long text.
+instructions: |
+  Help the person understand a document quickly. Read all of it before summarising.
+  Load the summarise skill and the pdf-files skill with load_skill before starting, and follow them.
+activities:
+  - "message: Drag a PDF or Word file into the chat, or paste the text."
+  - Give me the key points and any deadlines
+  - Explain this document in plain English
+  - List every action it asks of us

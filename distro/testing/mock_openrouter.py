@@ -2,8 +2,10 @@
 
 Keys: sk-or-v1-good (works), sk-or-v1-empty (valid, no usage left), sk-or-v1-broke (chat -> 402),
 sk-or-v1-blocked (chat -> 403 guardrail). Anything else is rejected with 401.
+Set MOCK_DUMP_DIR to save each chat request body (tools, system prompt, messages) as JSON.
 """
 import json
+import os
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -11,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 VALID = {"sk-or-v1-good": 5.0, "sk-or-v1-empty": 0, "sk-or-v1-broke": 1.0, "sk-or-v1-blocked": 1.0}
 MODELS = ["anthropic/claude-sonnet-5", "anthropic/claude-haiku-4.5"]
 LOG = open(sys.argv[2], "a") if len(sys.argv) > 2 else sys.stderr
+DUMP_DIR = os.environ.get("MOCK_DUMP_DIR")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -49,6 +52,9 @@ class Handler(BaseHTTPRequestHandler):
         LOG.write("  headers X-Title=%s Referer=%s model=%s\n" % (
             self.headers.get("X-Title"), self.headers.get("HTTP-Referer"), body.get("model")))
         LOG.flush()
+        if DUMP_DIR:
+            with open(os.path.join(DUMP_DIR, "request-%d.json" % time.time_ns()), "w") as dump:
+                json.dump(body, dump, indent=1)
         if not self.path.startswith("/api/v1/chat/completions"):
             return self.json(404, {"error": {"code": 404, "message": "not mocked"}})
         key = self.key()

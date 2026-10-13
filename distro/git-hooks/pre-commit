@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Enabled with: git config core.hooksPath distro/git-hooks
+exec "$(git rev-parse --show-toplevel)/distro/git-hooks/check-secrets.sh"

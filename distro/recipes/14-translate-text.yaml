@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Translate text
+description: Translate between languages, keeping the tone.
+instructions: |
+  Help the person translate text or a document.
+  Load the translation skill with load_skill before starting, and follow it.
+activities:
+  - "message: Paste the text or drop in the file, and tell me the language you need."
+  - Translate this email into Arabic
+  - Translate this document into English
+  - Make this translation sound more natural

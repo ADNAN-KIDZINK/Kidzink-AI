@@ -6,7 +6,12 @@ export type OpenRouterKeyCheck =
   | { ok: false; reason: 'invalid' | 'network' }
   | { ok: false; reason: 'unexpected'; status: number };
 
-export interface KidzinkApi {
+export interface DistroInfo {
+  isAdmin: boolean;
+  recipesDir: string;
+}
+
+export interface KidzinkApi extends DistroInfo {
   validateOpenRouterKey: (key: string) => Promise<OpenRouterKeyCheck>;
 }
 

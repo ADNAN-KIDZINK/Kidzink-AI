@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { Sliders, Bot, LoaderCircle, Settings, History } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useModelAndProvider } from '../../../ModelAndProviderContext';
@@ -124,7 +125,7 @@ export default function ModelsBottomBar({
     resolvedModel !== currentModel
   );
   const loadingModelLabel = intl.formatMessage(i18n.loadingModel);
-  const triggerLabel = isModelLoading ? loadingModelLabel : displayModel;
+  const triggerLabel = isModelLoading ? loadingModelLabel : getModelDisplayName(displayModel);
   const menuModelLabel = isModelLoading ? loadingModelLabel : displayModelName;
 
   useEffect(() => {

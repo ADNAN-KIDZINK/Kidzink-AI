@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Compare options
+description: Weigh up quotes, suppliers or choices and get a clear recommendation.
+instructions: |
+  Help the person compare options and reach a decision.
+  Load the compare-and-analyse skill with load_skill before starting, and follow it.
+activities:
+  - "message: Paste or drop in the options (quotes, proposals, products) and tell me what matters most."
+  - Compare these supplier quotes
+  - List the pros and cons of each option
+  - Which option is better value, and why?

@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fireEvent, render, type RenderOptions, screen } from '@testing-library/react';
 import ModelsBottomBar from './ModelsBottomBar';
@@ -128,7 +129,7 @@ describe('ModelsBottomBar', () => {
       />
     );
 
-    expect(screen.getByText('session-model')).toBeInTheDocument();
+    expect(screen.getAllByText('Display session-model')).toHaveLength(2);
     expect(screen.queryByTestId('model-loading-state')).not.toBeInTheDocument();
   });
 
@@ -142,7 +143,7 @@ describe('ModelsBottomBar', () => {
       />
     );
 
-    expect(screen.getByText('config-model')).toBeInTheDocument();
+    expect(screen.getAllByText('Display config-model')).toHaveLength(2);
     expect(screen.queryByTestId('model-loading-state')).not.toBeInTheDocument();
   });
 

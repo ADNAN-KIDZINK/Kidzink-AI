@@ -1,3 +1,4 @@
+// Modified by Kidzink for Kidzink AI (see DISTRO_NOTES.md).
 import { ModeSection } from '../mode/ModeSection';
 import { DictationSettings } from '../dictation/DictationSettings';
 import { SecurityToggle } from '../security/SecurityToggle';
@@ -7,6 +8,7 @@ import { LiveVoiceSettings } from './LiveVoiceSettings';
 import { SpellcheckToggle } from './SpellcheckToggle';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { defineMessages, useIntl } from '../../../i18n';
+import { isDistroAdmin } from '../../../distro/admin';
 
 const i18n = defineMessages({
   modeTitle: {
@@ -30,24 +32,30 @@ const i18n = defineMessages({
 
 export default function ChatSettingsSection() {
   const intl = useIntl();
+  // Approval mode, global hints and prompt-injection checks are set by IT, not staff.
+  const isAdmin = isDistroAdmin();
 
   return (
     <div className="space-y-4 pr-4 pb-8 mt-1">
-      <Card className="pb-2 rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="">{intl.formatMessage(i18n.modeTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.modeDescription)}</CardDescription>
-        </CardHeader>
-        <CardContent className="px-2">
-          <ModeSection />
-        </CardContent>
-      </Card>
+      {isAdmin && (
+        <Card className="pb-2 rounded-lg">
+          <CardHeader className="pb-0">
+            <CardTitle className="">{intl.formatMessage(i18n.modeTitle)}</CardTitle>
+            <CardDescription>{intl.formatMessage(i18n.modeDescription)}</CardDescription>
+          </CardHeader>
+          <CardContent className="px-2">
+            <ModeSection />
+          </CardContent>
+        </Card>
+      )}
 
-      <Card className="pb-2 rounded-lg">
-        <CardContent className="px-2">
-          <GoosehintsSection />
-        </CardContent>
-      </Card>
+      {isAdmin && (
+        <Card className="pb-2 rounded-lg">
+          <CardContent className="px-2">
+            <GoosehintsSection />
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="pb-2 rounded-lg">
         <CardContent className="px-2">
@@ -67,11 +75,13 @@ export default function ChatSettingsSection() {
         </CardContent>
       </Card>
 
-      <Card className="pb-2 rounded-lg">
-        <CardContent className="px-2">
-          <SecurityToggle />
-        </CardContent>
-      </Card>
+      {isAdmin && (
+        <Card className="pb-2 rounded-lg">
+          <CardContent className="px-2">
+            <SecurityToggle />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

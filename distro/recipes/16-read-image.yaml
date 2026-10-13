@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Read an image
+description: Copy text from a photo or screenshot, or describe it.
+instructions: |
+  Help the person with an image: extract text or data, or describe it. You can't create images; offer to write a prompt for an image tool instead.
+  Load the images skill with load_skill before starting, and follow it.
+activities:
+  - "message: Drag an image into the chat and tell me what you need from it."
+  - Copy out all the text in this image
+  - Turn this table or receipt into a spreadsheet
+  - Write an image prompt for a classroom concept

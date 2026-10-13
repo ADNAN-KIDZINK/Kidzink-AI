@@ -20,7 +20,23 @@
   },
   "provider": "openrouter",
   "defaultModel": "anthropic/claude-sonnet-5",
-  "allowedModels": [],
+  "modelTiers": [
+    {
+      "label": "Low",
+      "model": "anthropic/claude-haiku-4.5",
+      "description": "Fastest. Quick questions and simple tasks."
+    },
+    {
+      "label": "Medium",
+      "model": "anthropic/claude-sonnet-5",
+      "description": "Balanced. Best for most work."
+    },
+    {
+      "label": "High",
+      "model": "anthropic/claude-opus-5.5",
+      "description": "Most capable. Complex documents and analysis."
+    }
+  ],
   "releases": {
     "githubOwner": "ADNAN-KIDZINK",
     "githubRepo": "Kidzink-AI"

@@ -1,0 +1,11 @@
+version: 1.0.0
+title: Review a contract
+description: Key terms, risks and questions to raise.
+instructions: |
+  Help the person understand a contract or terms and spot risks. Remind them it isn't legal advice.
+  Load the contract-review skill and the pdf-files skill with load_skill before starting, and follow them.
+activities:
+  - "message: Drag the contract or terms into the chat. Tell me which side Kidzink is on if it isn't obvious."
+  - Summarise the key terms in a table
+  - What are the risks for Kidzink?
+  - What should we push back on?

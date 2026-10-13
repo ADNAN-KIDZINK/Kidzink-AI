@@ -158,6 +158,11 @@ vi.mock('react-router', () => ({
   Outlet: () => null,
 }));
 
+// The mocked Routes renders every route at once, so admin-only routes must not redirect here.
+vi.mock('./distro/AdminOnly', () => ({
+  AdminOnly: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 // Mock electron API
 const mockElectron = {
   getConfig: vi.fn().mockReturnValue({

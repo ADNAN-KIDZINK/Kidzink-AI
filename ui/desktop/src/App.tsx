@@ -3,6 +3,8 @@ import { useEffect, useState, useRef, type RefObject } from 'react';
 import { IpcRendererEvent } from 'electron';
 import { HashRouter, Routes, Route, useNavigate, useLocation, useSearchParams } from 'react-router';
 import KidzinkKeyGuard from './distro/KidzinkKeyGuard';
+import { AdminOnly } from './distro/AdminOnly';
+import { isDistroAdmin } from './distro/admin';
 import { importNostrSessionFromDeepLink } from './sessionLinks';
 import { ErrorUI } from './components/ErrorBoundary';
 import { ExtensionInstallModal } from './components/ExtensionInstallModal';
@@ -665,7 +667,7 @@ export function AppInner() {
         closeOnClick
         pauseOnHover
       />
-      <ExtensionInstallModal addExtension={addExtension} setView={setView} />
+      {isDistroAdmin() && <ExtensionInstallModal addExtension={addExtension} setView={setView} />}
       <RecipeConsentModalContainer />
       <RecipeParamsModalContainer />
       <div className="relative w-screen h-screen overflow-hidden bg-background-secondary flex flex-col">
@@ -673,7 +675,14 @@ export function AppInner() {
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <Routes>
             <Route path="launcher" element={<LauncherView />} />
-            <Route path="configure-providers" element={<ConfigureProvidersRoute />} />
+            <Route
+              path="configure-providers"
+              element={
+                <AdminOnly>
+                  <ConfigureProvidersRoute />
+                </AdminOnly>
+              }
+            />
             <Route path="standalone-app" element={<StandaloneAppView />} />
             <Route
               path="/"
@@ -702,16 +711,46 @@ export function AppInner() {
               <Route
                 path="extensions"
                 element={
-                  <ChatProvider chat={chat} setChat={setChat} contextKey="extensions">
-                    <ExtensionsRoute />
-                  </ChatProvider>
+                  <AdminOnly>
+                    <ChatProvider chat={chat} setChat={setChat} contextKey="extensions">
+                      <ExtensionsRoute />
+                    </ChatProvider>
+                  </AdminOnly>
                 }
               />
-              <Route path="apps" element={<AppsView />} />
+              <Route
+                path="apps"
+                element={
+                  <AdminOnly>
+                    <AppsView />
+                  </AdminOnly>
+                }
+              />
               <Route path="sessions" element={<SessionsRoute />} />
-              <Route path="schedules" element={<SchedulesRoute />} />
-              <Route path="recipes" element={<RecipesRoute />} />
-              <Route path="skills" element={<SkillsRoute />} />
+              <Route
+                path="schedules"
+                element={
+                  <AdminOnly>
+                    <SchedulesRoute />
+                  </AdminOnly>
+                }
+              />
+              <Route
+                path="recipes"
+                element={
+                  <AdminOnly>
+                    <RecipesRoute />
+                  </AdminOnly>
+                }
+              />
+              <Route
+                path="skills"
+                element={
+                  <AdminOnly>
+                    <SkillsRoute />
+                  </AdminOnly>
+                }
+              />
               <Route path="permission" element={<PermissionRoute />} />
             </Route>
           </Routes>
